@@ -155,7 +155,7 @@ public class EditItemActivity extends AppCompatActivity {
                 return;
             }
 
-            db.updateItem(itemId, name, quantity, categoryId);
+            db.updateItem(itemId, name, quantity, categoryId, purchased);
             Toast.makeText(this, "Item editado com sucesso!", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);
             finish();

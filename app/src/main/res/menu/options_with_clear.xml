@@ -2,4 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/add_new_category"
         android:id="@+id/show_categories" />
+    <item android:title="@string/clear_checked"
+        android:id="@+id/clear_checked" />
 </menu>

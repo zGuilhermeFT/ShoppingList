@@ -93,6 +93,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_LISTS, null);
     }
 
+    public Cursor getList(int listId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_LISTS + " WHERE id = ?";
+        return db.rawQuery(query, new String[]{String.valueOf(listId)});
+    }
+
     public void addItem(int listId, String name, int quantity, int categoryId, boolean purchased) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -110,12 +116,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_ITEMS + " WHERE id = ?";
         return db.rawQuery(query, new String[]{String.valueOf(itemId)});
     }
-    public void updateItem(int itemId, String name, int quantity, int categoryId) {
+    public void updateItem(int itemId, String name, int quantity, int categoryId, boolean purchased) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("quantity", quantity);
         values.put("category_id", categoryId);
+        values.put("purchased", purchased ? 1 : 0);
         db.update(TABLE_ITEMS, values, "id = ?", new String[] { String.valueOf(itemId) });
         db.close();
     }
@@ -134,9 +141,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Cursor getAllItems(int listId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_ITEMS + " WHERE list_id = " + listId, null);
+    public void deletePurchasedItems(int listId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_ITEMS, "list_id = ? AND purchased = 1", new String[] { String.valueOf(listId) });
+        db.close();
     }
 
     public Cursor getAllItemsAndCategories(int listId) {

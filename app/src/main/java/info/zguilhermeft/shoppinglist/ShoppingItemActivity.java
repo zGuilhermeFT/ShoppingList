@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -64,6 +66,18 @@ public class ShoppingItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shopping_item);
 
         db = new DatabaseHelper(this);
+
+        Cursor cursor = db.getList(listId);
+        if (cursor != null && cursor.moveToFirst()) {
+            int nameIndex = cursor.getColumnIndex("name");
+
+            setTitle("Lista: " + cursor.getString(nameIndex));
+
+            cursor.close();
+        } else {
+            Toast.makeText(this, "Nada foi encontrado", Toast.LENGTH_SHORT).show();
+        }
+
         list = findViewById(R.id.list);
         btn_add = findViewById(R.id.btn_add);
         btn_back = findViewById(R.id.btn_back);
@@ -143,46 +157,33 @@ public class ShoppingItemActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_with_clear, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        int itemID = item.getItemId();
-
-        if(itemID == R.id.clear_checked) {
-            clearChecked();
-            return true;
+        if(item.getItemId() == R.id.show_categories) {
+            Intent intent = new Intent(ShoppingItemActivity.this, CategoryActivity.class);
+            addItemActivityResultLauncher.launch(intent);
         }
-        else if(itemID == R.id.clear_all) {
-            clearAll();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
+        if(item.getItemId() == R.id.clear_checked) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setTitle(R.string.confirm);
+            String fmt = getResources().getString(R.string.confirm_message_buy);
+            builder.setMessage(fmt);
+            builder.setPositiveButton(R.string.remove, (dialog, which) -> {
+                db.deleteList(listId);
+                db.deletePurchasedItems(listId);
+                loadItemLists();
+            });
+            builder.setNegativeButton(R.string.cancel, null);
+            builder.show();
 
-    private void clearAll() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.confirm);
-        builder.setMessage(R.string.confirm_clear_all);
-        builder.setPositiveButton(R.string.clear_all, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                itemList.clear();
-                adapter.notifyDataSetChanged();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.create().show();
-    }
-
-    private void clearChecked() {
-        int i = 0;
-        while (i < itemList.size()) {
-            if (itemList.get(i).isChecked()) {
-                itemList.remove(i);
-            } else {
-                i++;
-            }
         }
-        adapter.notifyDataSetChanged();
+
+        return true;
     }
 }

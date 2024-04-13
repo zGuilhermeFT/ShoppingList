@@ -61,7 +61,7 @@ public class ShoppingItemAdapter extends ArrayAdapter<ShoppingItem> {
         ShoppingItem item = getItem(position);
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
         builder.setTitle(R.string.confirm);
-        String fmt = getContext().getResources().getString(R.string.confirm_message, item.getText());
+        String fmt = getContext().getResources().getString(R.string.confirm_message_item, item.getText());
         builder.setMessage(fmt);
         builder.setPositiveButton(R.string.remove, (dialog, which) -> {
             int itemId = item.getId();

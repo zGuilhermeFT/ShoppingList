@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.database.Cursor;
 
@@ -30,7 +34,8 @@ public class ShoppingListActivity extends AppCompatActivity {
     private ListView list;
     private Button btn_add;
     private EditText edit_list;
-    private TextView text;
+    private RelativeLayout main_activity;
+    private boolean isFirstRenderer = true;
     ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private void loadShoppingLists() {
@@ -49,12 +54,30 @@ public class ShoppingListActivity extends AppCompatActivity {
             }
             cursor.close();
 
+            if(!loadedLists.isEmpty() && isFirstRenderer) {
+                ShoppingList lastList = loadedLists.get(loadedLists.size() - 1);
+
+                Intent intent = new Intent(ShoppingListActivity.this, ShoppingItemActivity.class);
+                intent.putExtra("listId", lastList.getId());
+                startActivity(intent);
+            }
+
+            isFirstRenderer = false;
+
             // Update UI on main thread
             runOnUiThread(() -> {
                 shoppingList.clear();
                 shoppingList.addAll(loadedLists);
                 adapter.notifyDataSetChanged();
+                try {
+                    Thread.sleep(500); // Faz a thread da UI dormir por 500 milissegundos
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt(); // Re-interrompe a thread se ela for interrompida durante o sono
+                    return; // Opcional: sair do runnable se a thread for interrompida
+                }
+                main_activity.setVisibility(View.VISIBLE);
             });
+
         });
     }
 
@@ -74,6 +97,23 @@ public class ShoppingListActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.show_categories) {
+            Intent intent = new Intent(ShoppingListActivity.this, CategoryActivity.class);
+            startActivity(intent);
+        }
+
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_list);
@@ -82,6 +122,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         list = findViewById(R.id.list);
         btn_add = findViewById(R.id.btn_add);
         edit_list = findViewById(R.id.edit_item);
+        main_activity = findViewById(R.id.activity_shopping_list);
 
         ListView listView = findViewById(R.id.list);
         TextView emptyView = findViewById(R.id.empty_view);

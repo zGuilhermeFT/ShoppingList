@@ -2,6 +2,7 @@
     <string name="register_new_list">Listas de Compras</string>
     <string name="register_new_item">Ver Itens</string>
     <string name="add_new_item">Cadastrar novo Item</string>
+    <string name="add_new_category">Cadastrar categoria</string>
     <string name="edit_item">Editar Item</string>
     <string name="confirm">Confirmar</string>
     <string name="categories">Categorias</string>
@@ -9,6 +10,8 @@
     <string name="remove">Remover</string>
     <string name="edit">Editar</string>
     <string name="confirm_message">Você tem certeza que deseja remover \'%1$s\'?</string>
+    <string name="confirm_message_item">Você tem certeza que deseja remover \'\n%1$s\n\'?</string>
+    <string name="confirm_message_buy">Você tem certeza que deseja remover todos os itens marcados como comprados?</string>
     <string name="cannot_write">Não foi possível escrever</string>
     <string name="cannot_read">Não foi possível ler</string>
     <string name="clear_checked">Limpar items selecionados</string>
@@ -26,7 +29,7 @@
     <string name="button_edit_item">Editar Item</string>
     <string name="edit_list">Editar Lista</string>
     <string name="back_list">Voltar para listas</string>
-    <string name="back_item">Voltar para item</string>
+    <string name="back_item">Voltar para página anterior</string>
     <string name="no_lists_found">Nenhuma lista encontrada</string>
     <string name="no_items_found">Nenhum item encontrado</string>
     <string name="no_categories_found">Nenhuma categoria encontrada</string>

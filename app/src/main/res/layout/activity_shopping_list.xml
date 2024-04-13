@@ -4,7 +4,8 @@
     android:id="@+id/activity_shopping_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="info.zguilhermeft.shoppinglist.ShoppingListActivity">
+    tools:context="info.zguilhermeft.shoppinglist.ShoppingListActivity"
+    android:visibility="gone">
 
     <ListView
         android:id="@+id/list"
