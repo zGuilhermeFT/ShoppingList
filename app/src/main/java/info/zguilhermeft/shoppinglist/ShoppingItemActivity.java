@@ -196,7 +196,6 @@ public class ShoppingItemActivity extends AppCompatActivity {
             builder.setMessage(fmt);
             builder.setPositiveButton(R.string.remove, (dialog, which) -> {
                 // Limpa a lista e itens comprados no banco de dados.
-                db.deleteList(listId);
                 db.deletePurchasedItems(listId);
                 loadItemLists();
             });
