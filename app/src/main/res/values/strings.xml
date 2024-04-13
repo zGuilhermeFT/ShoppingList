@@ -1,0 +1,34 @@
+<resources>
+    <string name="register_new_list">Listas de Compras</string>
+    <string name="register_new_item">Ver Itens</string>
+    <string name="add_new_item">Cadastrar novo Item</string>
+    <string name="edit_item">Editar Item</string>
+    <string name="confirm">Confirmar</string>
+    <string name="categories">Categorias</string>
+    <string name="cancel">Cancelar</string>
+    <string name="remove">Remover</string>
+    <string name="edit">Editar</string>
+    <string name="confirm_message">Você tem certeza que deseja remover \'%1$s\'?</string>
+    <string name="cannot_write">Não foi possível escrever</string>
+    <string name="cannot_read">Não foi possível ler</string>
+    <string name="clear_checked">Limpar items selecionados</string>
+    <string name="clear_all">Limpar todos itens</string>
+    <string name="confirm_clear_all">Você tem certeza que deseja limpar todos itens?</string>
+    <string name="register_list">Cadastrar nova lista de compras</string>
+    <string name="register_category">Cadastrar nova categoria</string>
+    <string name="add_item">Adiciona Item na Lista</string>
+    <string name="hint_list_id">ID da Lista</string>
+    <string name="hint_item_name">Nome do Item</string>
+    <string name="hint_quantity">Quantidade</string>
+    <string name="button_add_item">Adicionar Item</string>>
+    <string name="category">Categoria</string>
+    <string name="buyed">Comprado</string>
+    <string name="button_edit_item">Editar Item</string>
+    <string name="edit_list">Editar Lista</string>
+    <string name="back_list">Voltar para listas</string>
+    <string name="back_item">Voltar para item</string>
+    <string name="no_lists_found">Nenhuma lista encontrada</string>
+    <string name="no_items_found">Nenhum item encontrado</string>
+    <string name="no_categories_found">Nenhuma categoria encontrada</string>
+    <string name="edit_category">Editar categoria</string>
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat"
+        tools:targetApi="31" >
+        <activity
+            android:name="info.zguilhermeft.shoppinglist.ShoppingListActivity"
+            android:label="@string/register_new_list"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name="info.zguilhermeft.shoppinglist.CategoryActivity"
+            android:label="@string/categories"/>
+        <activity
+            android:name="info.zguilhermeft.shoppinglist.ShoppingItemActivity"
+            android:label="@string/register_new_item" />
+        <activity
+            android:name="info.zguilhermeft.shoppinglist.AddItemActivity"
+            android:label="@string/add_new_item" />
+        <activity
+            android:name="info.zguilhermeft.shoppinglist.EditItemActivity"
+            android:label="@string/edit_item" />
+
+    </application>
+
+</manifest>
