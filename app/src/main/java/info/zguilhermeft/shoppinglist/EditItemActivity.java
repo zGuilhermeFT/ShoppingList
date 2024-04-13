@@ -13,11 +13,9 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.compras.R;
-
 import java.util.ArrayList;
 import java.util.List;
+import com.compras.R;
 
 public class EditItemActivity extends AppCompatActivity {
 
@@ -32,17 +30,19 @@ public class EditItemActivity extends AppCompatActivity {
     private int itemId;
     public ActivityResultLauncher<Intent> categoryActivityResultLauncher;
 
+    // Método inicial chamado quando a atividade é criada
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_item);  // Consider renaming this layout to something generic
+        setContentView(R.layout.activity_add_item);
 
+        // Recupera dados extras passados para a atividade
         Bundle extras = getIntent().getExtras();
         assert extras != null;
         itemId = extras.getInt("itemId");
 
+        // Inicializa o banco de dados e os componentes da UI
         db = new DatabaseHelper(this);
-
         editTextItemName = findViewById(R.id.editTextItemName);
         editTextQuantity = findViewById(R.id.editTextQuantity);
         spinnerCategory = findViewById(R.id.spinnerCategory);
@@ -50,14 +50,18 @@ public class EditItemActivity extends AppCompatActivity {
         buttonUpdateItem = findViewById(R.id.buttonAddItem);
         buttonCancel = findViewById(R.id.cancel_button);
         buttonAddCategory = findViewById(R.id.buttonAddCategory);
-        buttonUpdateItem.setText(R.string.edit_item); // Change button text to "Atualizar item"
 
+        buttonUpdateItem.setText(R.string.update_item);
+
+        // Carrega categorias no spinner e dados do item atual
         loadCategoriesIntoSpinner();
         loadItemData();
 
+        // Configuração dos listeners dos botões
         buttonCancel.setOnClickListener(v -> finish());
         buttonUpdateItem.setOnClickListener(v -> updateItem());
 
+        // Prepara e registra um lançador de atividades para o resultado
         categoryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -74,6 +78,7 @@ public class EditItemActivity extends AppCompatActivity {
         });
     }
 
+    // Carrega todas as categorias disponíveis no spinner
     private void loadCategoriesIntoSpinner() {
         Cursor cursor = db.getAllCategories();
         List<Category> categories = new ArrayList<>();
@@ -93,6 +98,8 @@ public class EditItemActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
     }
+
+    // Carrega dados do item a ser editado
     private void loadItemData() {
         Cursor cursor = db.getItem(itemId);
         if (cursor != null && cursor.moveToFirst()) {
@@ -120,6 +127,7 @@ public class EditItemActivity extends AppCompatActivity {
         }
     }
 
+    // Configura o spinner para selecionar a categoria correta
     private void setSpinnerToCategory(int categoryId) {
         ArrayAdapter<Category> adapter = (ArrayAdapter<Category>) spinnerCategory.getAdapter();
         for (int position = 0; position < adapter.getCount(); position++) {
@@ -130,8 +138,7 @@ public class EditItemActivity extends AppCompatActivity {
         }
     }
 
-
-
+    // Atualiza o item com novos dados inseridos
     private void updateItem() {
         if (spinnerCategory.getCount() == 0) {
             Toast.makeText(this, "Não há categorias disponíveis.", Toast.LENGTH_SHORT).show();
@@ -165,5 +172,4 @@ public class EditItemActivity extends AppCompatActivity {
             Toast.makeText(this, "Erro ao atualizar o item: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-
 }

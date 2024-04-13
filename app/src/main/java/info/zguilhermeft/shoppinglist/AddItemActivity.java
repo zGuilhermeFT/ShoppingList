@@ -19,6 +19,7 @@ import com.compras.R;
 
 public class AddItemActivity extends AppCompatActivity {
 
+    // Declaração de variáveis para manipulação dos elementos da interface.
     private EditText editTextItemName;
     private EditText editTextQuantity;
     private Spinner spinnerCategory;
@@ -27,20 +28,21 @@ public class AddItemActivity extends AppCompatActivity {
     private Button buttonCancel;
     private Button buttonAddCategory;
     private DatabaseHelper db;
-    private int listId;
+    private int listId; // ID da lista a que o item pertencerá.
     public ActivityResultLauncher<Intent> categoryActivityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Bundle extras = getIntent().getExtras();
-        assert extras != null;
-        listId = extras.getInt("listId");
+        assert extras != null; // Garante que os extras não sejam nulos.
+        listId = extras.getInt("listId"); // Obtém o ID da lista passado como extra.
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_item);
+        setContentView(R.layout.activity_add_item); // Define o layout da atividade.
 
-        db = new DatabaseHelper(this);
+        db = new DatabaseHelper(this); // Instancia o helper do banco de dados.
 
+        // Inicialização dos componentes da interface com base no layout.
         editTextItemName = findViewById(R.id.editTextItemName);
         editTextQuantity = findViewById(R.id.editTextQuantity);
         spinnerCategory = findViewById(R.id.spinnerCategory);
@@ -48,27 +50,31 @@ public class AddItemActivity extends AppCompatActivity {
         buttonAddItem = findViewById(R.id.buttonAddItem);
         buttonCancel = findViewById(R.id.cancel_button);
 
-        loadCategoriesIntoSpinner();
+        loadCategoriesIntoSpinner(); // Carrega as categorias disponíveis no spinner.
 
-        buttonCancel.setOnClickListener(v -> finish());
-        buttonAddItem.setOnClickListener(v -> addItem());
+        buttonCancel.setOnClickListener(v -> finish()); // Define o listener para fechar a atividade.
+        buttonAddItem.setOnClickListener(v -> addItem()); // Define o listener para adicionar um item.
         buttonAddCategory = findViewById(R.id.buttonAddCategory);
 
+        // Configura o launcher para resultados de atividade, utilizado para adicionar categorias.
         categoryActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        loadCategoriesIntoSpinner();
+                        loadCategoriesIntoSpinner(); // Recarrega as categorias se uma nova foi adicionada.
                         setResult(RESULT_OK);
                     }
                 }
         );
 
+        // Define o listener para abrir a atividade de adição de categoria.
         buttonAddCategory.setOnClickListener(view -> {
             Intent intent = new Intent(AddItemActivity.this, CategoryActivity.class);
             categoryActivityResultLauncher.launch(intent);
         });
     }
+
+    // Carrega as categorias do banco de dados e as adiciona ao spinner.
     private void loadCategoriesIntoSpinner() {
         Cursor cursor = db.getAllCategories();
         List<Category> categories = new ArrayList<>();
@@ -89,6 +95,7 @@ public class AddItemActivity extends AppCompatActivity {
         spinnerCategory.setAdapter(adapter);
     }
 
+    // Adiciona um novo item ao banco de dados usando os valores inseridos nos campos de entrada.
     private void addItem() {
         try {
             String name = editTextItemName.getText().toString().trim();

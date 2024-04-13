@@ -34,4 +34,5 @@
     <string name="no_items_found">Nenhum item encontrado</string>
     <string name="no_categories_found">Nenhuma categoria encontrada</string>
     <string name="edit_category">Editar categoria</string>
+    <string name="update_item">Editar Item</string>
 </resources>

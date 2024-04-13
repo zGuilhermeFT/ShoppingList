@@ -21,17 +21,18 @@ import java.util.concurrent.Executors;
 
 public class CategoryActivity extends AppCompatActivity {
 
-    private ArrayList<Category> categories;
-    private CategoryAdapter adapter;
-    private DatabaseHelper db;
+    private ArrayList<Category> categories; // Lista para armazenar as categorias.
+    private CategoryAdapter adapter; // Adaptador para o ListView de categorias.
+    private DatabaseHelper db; // Acesso ao banco de dados.
 
-    private ListView list;
-    private Button btn_add;
-    private Button btn_back;
-    private EditText edit_list;
+    private ListView list; // ListView para exibir as categorias.
+    private Button btn_add; // Botão para adicionar uma nova categoria.
+    private Button btn_back; // Botão para voltar.
+    private EditText edit_list; // Campo de texto para entrada do nome da categoria.
     private TextView text;
-    ExecutorService executor = Executors.newSingleThreadExecutor();
+    ExecutorService executor = Executors.newSingleThreadExecutor(); // Executor para operações em background.
 
+    // Carrega as categorias do banco de dados e atualiza a lista na UI.
     private void loadCategories() {
         executor.execute(() -> {
             ArrayList<Category> loadedCategories = new ArrayList<>();
@@ -48,7 +49,7 @@ public class CategoryActivity extends AppCompatActivity {
             }
             cursor.close();
 
-            // Update UI on main thread
+            // Atualiza a UI no thread principal.
             runOnUiThread(() -> {
                 categories.clear();
                 categories.addAll(loadedCategories);
@@ -57,16 +58,18 @@ public class CategoryActivity extends AppCompatActivity {
         });
     }
 
+    // Adiciona uma nova categoria ao banco de dados e atualiza a lista.
     private void addItem() {
         String categoryName = edit_list.getText().toString();
         if (!categoryName.isEmpty()) {
             db.addCategory(categoryName);
-            loadCategories();  // Refresh the category list
+            loadCategories();  // Atualiza a lista de categorias.
             edit_list.setText("");
             list.smoothScrollToPosition(categories.size() - 1);
 
             setResult(RESULT_OK);
 
+            // Esconde o teclado virtual após adicionar a categoria.
             View view = this.getCurrentFocus();
             if (view != null) {
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -75,6 +78,7 @@ public class CategoryActivity extends AppCompatActivity {
         }
     }
 
+    // Configuração inicial da atividade.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,20 +96,21 @@ public class CategoryActivity extends AppCompatActivity {
         listView.setEmptyView(emptyView);
 
         categories = new ArrayList<>();
-        loadCategories(); // Load lists from database
+        loadCategories(); // Carrega as categorias na inicialização.
 
         adapter = new CategoryAdapter(
-                this,              // Context
-                R.layout.shopping_list,  // ID do layout do item
-                categories,      // Lista de dados
-                db                 // Instância de DatabaseHelper
+                this,              // Contexto
+                R.layout.shopping_list,  // Layout dos itens
+                categories,      // Dados
+                db                 // Acesso ao banco de dados
         );
 
-
+        // Listener para o botão de voltar.
         btn_back.setOnClickListener(view -> {
             finish();
         });
 
+        // Listener para o botão de adicionar categoria.
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +125,6 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
-        list.setAdapter(adapter);
+        list.setAdapter(adapter); // Configura o adaptador no ListView.
     }
 }

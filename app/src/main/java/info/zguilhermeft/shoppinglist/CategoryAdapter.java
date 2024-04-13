@@ -23,6 +23,7 @@ import java.util.List;
 public class CategoryAdapter extends ArrayAdapter<Category> {
     private DatabaseHelper db;
 
+    // Construtor do adaptador
     public CategoryAdapter(Context context, int resource, List<Category> objects, DatabaseHelper db) {
         super(context, resource, objects);
         this.db = db;
@@ -37,18 +38,21 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             result = inflater.inflate(R.layout.shopping_list, parent, false);
         }
 
+        // Vinculação dos elementos de UI
         TextView text = result.findViewById(R.id.shopping_list);
         Button btnEdit = result.findViewById(R.id.btn_edit);
         Button btnRemove = result.findViewById(R.id.btn_remove);
 
+        // Configuração dos dados da categoria no texto do item
         Category item = getItem(position);
         text.setText(item.getText());
 
+        // Listener para edição de categoria
         btnEdit.setOnClickListener(v -> {
-            // Placeholder for edit functionality
             editItem(position);
         });
 
+        // Listener para remoção de categoria
         btnRemove.setOnClickListener(v -> {
             maybeRemoveItem(position);
         });
@@ -56,6 +60,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         return result;
     }
 
+    // Método para tentativa de remoção de uma categoria
     private void maybeRemoveItem(int position) {
         Category item = getItem(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -68,6 +73,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
             remove(item);
             notifyDataSetChanged();
 
+            // Retorna o resultado para a atividade chamadora
             if (getContext() instanceof CategoryActivity) {
                 ((CategoryActivity) getContext()).setResult(Activity.RESULT_OK);
             } else {
@@ -78,12 +84,13 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         builder.show();
     }
 
+    // Método para editar uma categoria
     private void editItem(int position) {
         Category item = getItem(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.edit_category);
 
-        // Configura o EditText
+        // Configura o campo de entrada de texto
         final EditText input = new EditText(getContext());
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setText(item.getText());
@@ -97,6 +104,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                 db.updateCategory(item.getId(), itemName);
                 notifyDataSetChanged();
 
+                // Retorna o resultado para a atividade chamadora
                 if (getContext() instanceof CategoryActivity) {
                     ((CategoryActivity) getContext()).setResult(Activity.RESULT_OK);
                 } else {
